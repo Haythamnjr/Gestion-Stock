@@ -139,44 +139,14 @@ class Stock extends Connexion
             }
         }
     }
-    public function SupprimerBase()
-    {
-        if ($this->Conect) {
-            try {
-                $Supprimer = $this->Conect->prepare("DELETE FROM mouvements_stock WHERE id = ?");
-                $Supprimer->execute([$this->getId()]);
-            } catch (Exception $e) {
-                error_log("il y'a une Probléme de suppression " . $e->getMessage());
-            }
-        }
-    }
-    public function ModifierBase()
-    {
-        if ($this->Conect) {
-            try {
-                $Modifier = $this->Conect->prepare("UPDATE mouvements_stock SET type_oper = ?, qte_entree = ?, cu_entree = ?, qte_sortie = ?, cu_sortie = ?, qte_stock_finale = ?, cu_stock_moyen = ? WHERE id = ?");
-                $Modifier->execute([
-                    htmlspecialchars((string)$this->getTypeOper()),
-                    (int)$this->getQteEntree(),
-                    (float)$this->getCuEntree(),
-                    (int)$this->getQteSortie(),
-                    (float)$this->getCuSortie(),
-                    (int)$this->getQteStockFinale(),
-                    (float)$this->getCuStockMoyen(),
-                    $this->getId()
-                ]);
-            } catch (Exception $e) {
-                error_log("il y'a une Probléme de modification " . $e->getMessage());
-            }
-        }
-    }
+    
     // Récupérer toutes les lignes de mouvements de stock
     public function Afficher()
     {
         if ($this->Conect) {
             try {
                 $Ajouter = $this->Conect->prepare("SELECT * FROM MOUVEMENTS_STOCK");
-                $Ajouter->execute([]);
+                $Ajouter->execute();
                 return $Ajouter->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, Stock::class);
             } catch (Exception $e) {
                 error_log("il y'a une Probléme de l'affichage " . $e->getMessage());
